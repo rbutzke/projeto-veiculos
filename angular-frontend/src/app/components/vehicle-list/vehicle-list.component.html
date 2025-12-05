@@ -1,0 +1,299 @@
+<div class="vehicle-container">
+  <!-- Cabeçalho -->
+  <div class="header">
+    <h1>
+      <i class="fas fa-car"></i> Lista de Veículos
+    </h1>
+    <button class="btn btn-primary" (click)="createVehicle()">
+      <i class="fas fa-plus"></i> Novo Veículo
+    </button>
+  </div>
+
+  <!-- Barra de Pesquisa -->
+  <div class="search-bar">
+    <div class="search-input">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="searchVehicles()"
+        placeholder="Buscar veículos por marca, modelo, placa , renavam, ano..."
+      >
+    </div>
+    <div class="items-per-page">
+      <label>itens por página:</label>
+      <select [(ngModel)]="itemsPerPage" (change)="loadVehicles()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Mensagem de Erro -->
+  <div *ngIf="error" class="alert alert-error">
+    <i class="fas fa-exclamation-circle"></i> {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+    <p>Carregando veículos...</p>
+  </div>
+
+  <!-- Tabela de Veículos -->
+  <div *ngIf="!isLoading && filteredVehicles.length > 0" class="table-container">
+    <table class="vehicle-table">
+      <thead>
+        <tr>
+          <th (click)="sortVehicles('placa')">
+            Placa
+            <span *ngIf="sortBy === 'placa'">
+              {{ sortOrder === 'ASC' ? '↑' : '↓' }}
+            </span>
+          </th>
+          <th (click)="sortVehicles('chassi')">
+            Chassi
+            <span *ngIf="sortBy === 'chassi'">
+              {{ sortOrder === 'ASC' ? '↑' : '↓' }}
+            </span>
+          </th>
+          <th (click)="sortVehicles('renavam')">
+            Renavam
+            <span *ngIf="sortBy === 'renavam'">
+              {{ sortOrder === 'ASC' ? '↑' : '↓' }}
+            </span>
+          </th>
+          <th (click)="sortVehicles('modelo')">
+            Modelo
+            <span *ngIf="sortBy === 'modelo'">
+              {{ sortOrder === 'ASC' ? '↑' : '↓' }}
+            </span>
+          </th>
+          <th (click)="sortVehicles('marca')">
+            Marca
+            <span *ngIf="sortBy === 'marca'">
+              {{ sortOrder === 'ASC' ? '↑' : '↓' }}
+            </span>
+          </th>
+
+          <th (click)="sortVehicles('ano')">
+            Ano
+            <span *ngIf="sortBy === 'ano'">
+              {{ sortOrder === 'ASC' ? '↑' : '↓' }}
+            </span>
+          </th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vehicle of filteredVehicles">
+          <td>{{ vehicle.placa }}</td>
+          <td>{{ vehicle.chassi }}</td>
+          <td>{{ vehicle.renavam }}</td>
+          <td>{{ vehicle.modelo }}</td>
+          <td>{{ vehicle.marca }}</td>
+          <td>{{ vehicle.ano }}</td>
+          <td class="actions">
+            <button class="btn btn-view" (click)="viewVehicle(vehicle)" title="Visualizar">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn btn-edit" (click)="editVehicle(vehicle)" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-delete" (click)="deleteVehicle(vehicle.id)" title="Excluir">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mensagem de Nenhum Resultado -->
+  <div *ngIf="!isLoading && filteredVehicles.length === 0" class="no-results">
+    <i class="fas fa-car-crash"></i>
+    <h3>Nenhum veículo encontrado</h3>
+    <p>Tente ajustar sua busca ou adicione um novo veículo.</p>
+  </div>
+
+  <!-- Paginação -->
+  <div *ngIf="totalPages > 1 && !isLoading" class="pagination">
+    <button
+      class="pagination-btn"
+      [disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)"
+    >
+      <i class="fas fa-chevron-left"></i> Anterior
+    </button>
+    
+    <div class="page-numbers">
+      <button
+        *ngFor="let page of paginationArray"
+        class="page-btn"
+        [class.active]="page === currentPage"
+        (click)="changePage(page)"
+      >
+        {{ page }}
+      </button>
+    </div>
+    
+    <button
+      class="pagination-btn"
+      [disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)"
+    >
+      Próxima <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- Contador de Resultados -->
+  <div *ngIf="!isLoading" class="results-info">
+    Mostrando {{ filteredVehicles.length }} de {{ totalItems }} veículos
+    <span *ngIf="searchTerm">(filtrados)</span>
+  </div>
+</div>
+
+<!-- Modal de Veículo -->
+<div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>
+        <i class="fas" [class.fa-car]="modalMode === 'view'"
+                       [class.fa-edit]="modalMode === 'edit'"
+                       [class.fa-plus]="modalMode === 'create'"></i>
+        {{ modalMode === 'view' ? 'Detalhes do Veículo' :
+           modalMode === 'edit' ? 'Editar Veículo' : 'Novo Veículo' }}
+      </h2>
+      <button class="btn-close" (click)="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <!-- Modo Visualização -->
+      <div *ngIf="modalMode === 'view' && selectedVehicle" class="view-mode">
+        <div class="vehicle-details">
+          <div class="detail-row">
+            <span class="detail-label">Placa:</span>
+            <span class="detail-value">{{ selectedVehicle.placa }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Chassi:</span>
+            <span class="detail-value">{{ selectedVehicle.chassi }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Renavam:</span>
+            <span class="detail-value">{{ selectedVehicle.renavam }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Modelo:</span>
+            <span class="detail-value">{{ selectedVehicle.modelo}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Marca:</span>
+            <span class="detail-value">{{ selectedVehicle.marca}}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Ano:</span>
+            <span class="detail-value">{{ selectedVehicle.ano}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modo Edição/Criação -->
+      <div *ngIf="modalMode !== 'view'" class="edit-mode">
+        <form (ngSubmit)="saveVehicle()" class="vehicle-form">
+          <div class="form-group">
+            <label for="brand">Placa *</label>
+             <input
+                  type="text"
+                  id="placa"
+                  [(ngModel)]="formVehicle.placa"
+                  name="placa"
+                  required
+                  placeholder="Ex: XRZ4060"
+                  [disabled]="modalMode === 'edit'"
+                  [readonly]="modalMode === 'edit'"
+                  [class.readonly-field]="modalMode === 'edit'"
+             >
+          </div>
+          <div class="form-group">
+            <label for="brand">Chassi *</label>
+              <input
+                type="text"
+                id="chassi"
+                [(ngModel)]="formVehicle.chassi"
+                name="chassi"
+                required
+                placeholder="Ex: T23456789ZXCRTFJT"
+                [disabled]="modalMode === 'edit'"
+                [readonly]="modalMode === 'edit'"
+                [class.readonly-field]="modalMode === 'edit'"
+            >
+          </div>
+          <div class="form-group">
+            <label for="brand">Renavam *</label>
+              <input
+                type="text"
+                id="renavam"
+                [(ngModel)]="formVehicle.renavam"
+                name="renavam"
+                required
+                placeholder="Ex: T23456789ZXCRTFJT"
+                [disabled]="modalMode === 'edit'"
+                [readonly]="modalMode === 'edit'"
+                [class.readonly-field]="modalMode === 'edit'"
+            >
+          </div>
+          <div class="form-group">
+            <label for="model">Modelo *</label>
+            <input
+              type="text"
+              id="modelo"
+              [(ngModel)]="formVehicle.modelo"
+              name="modelo"
+              required
+              placeholder="Ex: Corolla"
+            >
+          </div>
+          <div class="form-group">
+            <label for="brand">Marca *</label>
+            <input
+              type="text"
+              id="marca"
+              [(ngModel)]="formVehicle.marca"
+              name="marca"
+              required
+              placeholder="Ex: Toyota"
+            >
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ano">Ano *</label>
+              <input
+                type="number"
+                id="ano"
+                [(ngModel)]="formVehicle.ano"
+                name="ano"
+                required
+                min="1900"
+                [max]="maxYear"
+                >
+            </div>        
+
+          </div>          
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              {{ modalMode === 'create' ? 'Criar' : 'Salvar' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
