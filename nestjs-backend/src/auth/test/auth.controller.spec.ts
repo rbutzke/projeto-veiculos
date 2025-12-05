@@ -2,7 +2,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
-import { CreateUserDto } from '../dto/createUser.dto';
+import { CreateAuthDto } from '../dto/createAuth.dto';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { validateSync } from 'class-validator';
@@ -64,7 +64,7 @@ describe('AuthController', () => {
   describe('register', () => {
     it('deve chamar authService.register com os dados corretos', async () => {
       // Arrange
-      const createUserDto: CreateUserDto = {
+      const createUserDto: CreateAuthDto = {
         email: 'test@example.com',
         password: 'password123',
         name: 'testuser',
@@ -88,7 +88,7 @@ describe('AuthController', () => {
 
     it('deve lidar com erro no registro', async () => {
       // Arrange
-      const createUserDto: CreateUserDto = {
+      const createUserDto: CreateAuthDto = {
         email: 'test@example.com',
         password: 'password123',
         name: 'testuser',
@@ -182,7 +182,7 @@ describe('AuthController', () => {
 // Testes para os DTOs 
 describe('CreateUserDto', () => {
   it('deve criar um DTO válido', () => {
-    const dto = new CreateUserDto();
+    const dto = new CreateAuthDto();
     dto.email = 'test@example.com';
     dto.password = 'password123';
     dto.name = 'testuser';
@@ -194,7 +194,7 @@ describe('CreateUserDto', () => {
 
   it('deve validar email correto', () => {
     // Se você usar class-validator, pode testar as validações aqui
-    const dto = new CreateUserDto();
+    const dto = new CreateAuthDto();
     dto.email = 'invalid-email'; // Email inválido
     
     // Exemplo de validação (se estiver usando class-validator)

@@ -1,1 +1,5 @@
-export class Auth {}
+export class AuthEntity {
+      email: string;
+      name: string;
+      role?: string;
+}
