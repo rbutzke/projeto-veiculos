@@ -2,6 +2,7 @@ import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { VehicleEntity } from '../entities/vehicle.entity';
 
+
 export class ReturnVehicleDto {
     id: number; 
     placa: string;

@@ -6,7 +6,9 @@ import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { PaginationDto } from '../common/pagination/pagination.dto';
+import { ApiSecurity } from '@nestjs/swagger';
 
+@ApiSecurity('JWT-auth')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('vehicle')
 export class VehicleController {

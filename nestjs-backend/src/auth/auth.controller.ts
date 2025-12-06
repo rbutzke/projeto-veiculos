@@ -2,8 +2,9 @@ import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateAuthDto } from './dto/createAuth.dto';
+import { ApiSecurity } from '@nestjs/swagger';
 
-
+@ApiSecurity('JWT-auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
