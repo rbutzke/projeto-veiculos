@@ -1,0 +1,25 @@
+# Usamos a imagem do Node (versão LTS ou atual)
+FROM node:22-alpine
+
+# Define o diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia apenas os arquivos de dependência primeiro
+COPY package*.json ./
+
+# Instala as dependências
+RUN npm install
+
+# Instala o Angular CLI globalmente dentro do container (opcional, mas útil para rodar comandos 'ng')
+RUN npm install -g @angular/cli
+
+# Copia o restante do código
+COPY . .
+
+# Expõe a porta padrão do Angular
+EXPOSE 4200
+
+# Comando para iniciar o servidor
+# --host 0.0.0.0 é OBRIGATÓRIO para acessar o container de fora (do seu navegador)
+# --poll é recomendado para garantir que o Docker perceba as mudanças nos arquivos (especialmente no Windows)
+CMD ["ng", "serve", "--host", "0.0.0.0", "--poll", "2000"]

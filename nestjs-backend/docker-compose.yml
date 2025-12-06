@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Aplicação NestJS
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs-veiculos-dev
+    ports:
+      - "7777:7777"
+      - "9229:9229" # Porta para debug
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+    depends_on:
+      - postgres
+    networks:
+      - nest-network
+    command: npm run start:dev
+
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres-veiculos-dev
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # script inicial
+    networks:
+      - nest-network
+
+  # PGAdmin (para gerenciar o banco)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-dev
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD={PGADMIN_PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - nest-network
+
+networks:
+  nest-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

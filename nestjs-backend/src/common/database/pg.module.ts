@@ -12,11 +12,11 @@ import { PG_POOL } from './pg.constants'; // constante para o token
       // Injeta ConfigService na useFactory
       useFactory: async (configService: ConfigService): Promise<Pool> => {
         const pool = new Pool({
-          user: configService.get<string>('DATABASE_USER'),
-          host: configService.get<string>('DATABASE_HOST'),
-          database: configService.get<string>('DATABASE_NAME'),
-          password: configService.get<string>('DATABASE_PASSWORD'),
-          port: configService.get<number>('DATABASE_PORT'),
+          user: configService.get<string>('DB_USERNAME'),
+          host: configService.get<string>('DB_HOST'),
+          database: configService.get<string>('DB_DATABASE'),
+          password: configService.get<string>('DB_PASSWORD'),
+          port: configService.get<number>('DB_PORT'),
         });
 
         // O pool gerencia a conexão automaticamente, mas você pode testar a conexão:

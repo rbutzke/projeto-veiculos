@@ -1,0 +1,41 @@
+# Dockerfile para desenvolvimento com hot reload
+FROM node:22-alpine
+
+# Instala dependências necessárias
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git \
+    curl \
+    bash
+
+# Instala NestJS CLI globalmente
+RUN npm install -g @nestjs/cli
+
+# Define diretório de trabalho
+WORKDIR /usr/src/app
+
+# Copia apenas os arquivos de dependência primeiro
+COPY package*.json ./
+
+# Instala dependências
+RUN npm install
+
+# Copia o restante do código (excluindo dist)
+COPY . .
+
+# Expõe portas
+EXPOSE 7777 9229
+
+# Configurações para hot reload
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+ENV NODE_ENV=development
+ENV PORT=7777
+
+# Remove dist se existir e cria estrutura
+RUN rm -rf dist && mkdir -p dist
+
+# Comando para desenvolvimento com hot reload
+CMD ["sh", "-c", "rm -rf dist/* && npm run start:debug"]

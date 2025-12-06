@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    container_name: angular-dev
+    ports:
+      - "4200:4200"
+    volumes:
+      # 1. Sincroniza sua pasta atual com a pasta /app do container
+      - .:/app
+      # 2. IMPORTANTE: Evita que a node_modules do seu PC (se existir) sobrescreva a do container
+      - /app/node_modules
+      # Habilita suporte a Hot Reload 
+    environment:
+      - CHOKIDAR_USEPOLLING=true
