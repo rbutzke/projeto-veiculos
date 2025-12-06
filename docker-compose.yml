@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # 1. Serviço RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management-alpine # Imagem oficial com interface de gerenciamento
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672" # Porta padrão para comunicação AMQP
+      - "15672:15672" # Porta para o Management Plugin (acessível via http://localhost:15672)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck: # Garante que o RabbitMQ está pronto antes dos serviços iniciarem
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 60s
+
+  # 2. Serviço Producer (API REST)
+  producer:
+    build:
+      context: ./nestjs-payment-producer # Caminho para a pasta e Dockerfile
+      dockerfile: Dockerfile
+    container_name: payment-producer
+    ports:
+      - "7778:7778" # Porta da API REST
+    environment:
+      # Use o nome do serviço 'rabbitmq' como hostname
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy # Só inicia se o RabbitMQ estiver saudável
+    # Adiciona hot-reload para desenvolvimento (opcional)
+    volumes:
+      - ./nestjs-payment-producer:/app
+      - /app/node_modules # Impede que o node_modules local sobrescreva o do container
+    command: npm run start:dev
+
+  # 3. Serviço Consumer (Worker)
+  worker:
+    build:
+      context: ./nestjs-payment-worker # Caminho para a pasta e Dockerfile
+      dockerfile: Dockerfile
+    container_name: payment-worker
+    environment:
+      # Use o nome do serviço 'rabbitmq' como hostname
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy # Só inicia se o RabbitMQ estiver saudável
+    # Adiciona hot-reload para desenvolvimento (opcional)
+    volumes:
+      - ./nestjs-payment-worker:/app
+      - /app/node_modules
+    command: npm run start:dev # Seu worker precisa ser iniciado com o comando correto
