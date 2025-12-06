@@ -1,10 +1,14 @@
 // src/payment-consumer.service.ts - USANDO AMQPLIB
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Pool } from 'pg';
+import { PG_POOL } from '../common/database/pg.constants'; 
 
 @Injectable()
 export class PaymentConsumerService implements OnModuleInit {
   private readonly logger = new Logger(PaymentConsumerService.name);
   private channel: any = null;
+
+  constructor(@Inject(PG_POOL) private readonly pool: Pool,) {}
 
   async onModuleInit() {
     await this.connectAndConsume();
@@ -71,9 +75,58 @@ export class PaymentConsumerService implements OnModuleInit {
     // Simula processamento
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // 1. Salvar no banco
-    // await this.saveToDatabase(data);
+     console.log('Testando conexão com PostgreSQL...');
+     await this.pool.query('SELECT 1');
+     console.log('✅ Conexão com PostgreSQL estabelecida');
+
+     //SALVA NO BANCO DE DADOS
+     await this.saveToDatabase(data); 
+
+    this.logger.log(`✅ Mensagem ${data.id} processada com sucesso`);
     
-    this.logger.log(`--- Processamento concluído ---`);
   }
+
+   async saveToDatabase(data: any): Promise<void> {
+     try {
+      this.logger.log('💾 Salvando pagamento no banco de dados...');
+      
+      // Query para inserir o pagamento
+      const query = `
+        INSERT INTO payments (clientId, description, amount, currency)
+        VALUES ($1, $2, $3, $4)
+        ON CONFLICT (id) DO UPDATE SET
+          clientId = EXCLUDED.clientId,
+          description = EXCLUDED.description,
+          amount = EXCLUDED.amount,
+          currency = EXCLUDED.currency,
+          updated_at = CURRENT_TIMESTAMP
+        RETURNING *;
+      `;
+      
+      // Valores para a query
+      const values = [
+        data.clientId,
+        data.description || 'Pagamento sem descrição',
+        data.amount,
+        data.currency || 'BRL'
+      ];
+
+
+      // Executa a query usando o pool
+      const result = await this.pool.query(query, values);
+      
+      this.logger.log(`✅ Pagamento salvo no banco. ID: ${result.rows[0].id}`);
+      this.logger.log(`📊 Registro: ${JSON.stringify(result.rows[0])}`);
+      
+    } catch (error: any) {
+      this.logger.error(`❌ Erro ao salvar no banco: ${error.message}`);
+      this.logger.error(`🔍 Detalhes do erro: ${JSON.stringify(error)}`);
+      
+      // Relança o erro para que o consumidor possa fazer nack
+      throw new Error(`Falha ao salvar pagamento no banco: ${error.message}`);
+    }
+  }
+
 }
+    
+    

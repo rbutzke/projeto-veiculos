@@ -29,7 +29,7 @@ services:
   # Banco de dados PostgreSQL
   postgres:
     image: postgres:13-alpine
-    container_name: postgres-veiculos-dev
+    container_name: postgres
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}

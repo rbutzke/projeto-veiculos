@@ -38,3 +38,20 @@ INSERT INTO users (email, password_hash, name, role)
 VALUES ('admin@example.com', '$2b$10$XCy5nS7UrjSvVMHFVudL9u4kYW4rWkD8PND7GB0Q2aZxKoVsuZEtK', 'Admin', 'admin');
 
 
+
+-- Tabela de Pagamentos
+CREATE TABLE payments (
+    id SERIAL PRIMARY KEY,
+    clientId VARCHAR(100) NOT NULL,
+    description VARCHAR(300) NOT NULL,
+    amount NUMERIC(10, 2) NOT NULL,
+    currency VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índice para busca por clientId
+CREATE INDEX idx_payments_clientId ON payments(clientId);
+
+
+

@@ -12,6 +12,9 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - projeto-veiculos_default
+
     healthcheck: # Garante que o RabbitMQ está pronto antes dos serviços iniciarem
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 30s
@@ -30,6 +33,8 @@ services:
     environment:
       # Use o nome do serviço 'rabbitmq' como hostname
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - projeto-veiculos_default
     depends_on:
       rabbitmq:
         condition: service_healthy # Só inicia se o RabbitMQ estiver saudável
@@ -47,7 +52,10 @@ services:
     container_name: payment-worker
     environment:
       # Use o nome do serviço 'rabbitmq' como hostname
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    networks:
+      - projeto-veiculos_default
+      - nestjs-backend_nest-network
     depends_on:
       rabbitmq:
         condition: service_healthy # Só inicia se o RabbitMQ estiver saudável
@@ -56,3 +64,12 @@ services:
       - ./nestjs-payment-worker:/app
       - /app/node_modules
     command: npm run start:dev # Seu worker precisa ser iniciado com o comando correto
+
+networks:
+  projeto-veiculos_default:
+    external: true
+    name: projeto-veiculos_default
+  
+  nestjs-backend_nest-network:
+    external: true
+    name: nestjs-backend_nest-network
