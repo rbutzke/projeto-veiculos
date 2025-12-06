@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "a238d38e-bcef-4df6-95e6-5b747f448bd6",
+		"name": "Projeto-Veiculo-NestJS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6837828"
+	},
+	"item": [
+		{
+			"name": "Vehicle",
+			"item": [
+				{
+					"name": "Create Vehicle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwic3ViIjoxLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjQ5NDE2ODYsImV4cCI6MTc2NTAyODA4Nn0.9GqMngMIfPjw_KcUON45Yq6VD3fUGc_kDidCy5b0Fmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"placa\":\"TKC2020\",\n    \"chassi\": \"TK3456789ZXCRTFJT\",\n    \"renavam\":\"TK2B3C4D8T1\",\n    \"modelo\": \"TKtracker 2023 LT 1.0 turbo\",\n    \"marca\": \"TKChevrolet\",\n    \"ano\": 2025\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7777/vehicle",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"vehicle"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Vehicle",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJzdWIiOjIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY0ODAzNDQwLCJleHAiOjE3NjQ4ODk4NDB9.SYkAUj1y3GIGkzOTUjevFiWo9XJjJItyKVFqx38wy0E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"placa\":\"ZXC2020\",\n    \"classi\": \"123456789ZXCRTFJT\",\n    \"renavam\":\"1A2B3C4D8T1\",\n    \"modelo\": \"tracker 2023 LT 1.0 turbo\",\n    \"marca\": \"Chevrolet\",\n    \"ano\": 2023\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7777/vehicle?page=1&limit=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"vehicle"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Vehicle by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJzdWIiOjIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY0ODAzNDQwLCJleHAiOjE3NjQ4ODk4NDB9.SYkAUj1y3GIGkzOTUjevFiWo9XJjJItyKVFqx38wy0E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7777/vehicle/4",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"vehicle",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Vehicle by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJzdWIiOjIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY0ODAzNDQwLCJleHAiOjE3NjQ4ODk4NDB9.SYkAUj1y3GIGkzOTUjevFiWo9XJjJItyKVFqx38wy0E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"chassi\": \"T23456789ZXCRTFJT\",\n    \"modelo\": \"2025 teste Silverado Turbo\",\n    \"marca\": \"GM\",\n    \"ano\": 2026\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7777/vehicle/5",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"vehicle",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Vehicle by ID Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJzdWIiOjIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzY0ODAzNDQwLCJleHAiOjE3NjQ4ODk4NDB9.SYkAUj1y3GIGkzOTUjevFiWo9XJjJItyKVFqx38wy0E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"placa\":\"ZXC2020\",\n    \"classi\": \"T23456789ZXCRTFJT\",\n    \"renavam\":\"1A2B3C4D8T1\",\n    \"modelo\": \"tracker 2023 LT 1.0 turbo\",\n    \"marca\": \"Chevrolet\",\n    \"ano\": 2023\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7777/vehicle/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"vehicle",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwic3ViIjoxLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjQ4NzQwOTMsImV4cCI6MTc2NDk2MDQ5M30.0dQeYIrsVrQUJtKQEDy77tQ_HDGcPBm3uSdANmqxN3g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"carlosm@example.com\",\n  \"password\": \"senha123\",\n  \"name\": \"Carlos Magno\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7777/auth/register",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"senha123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7777/auth/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7777",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "Send Payment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwic3ViIjoxLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjQ5NDE2ODYsImV4cCI6MTc2NTAyODA4Nn0.9GqMngMIfPjw_KcUON45Yq6VD3fUGc_kDidCy5b0Fmo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 381.50,\n  \"currency\": \"BRL\",\n  \"description\": \"Pagamento IPVA\",\n  \"clientId\": \"dxp-987\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7778/payment",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7778",
+							"path": [
+								"payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
