@@ -52,7 +52,7 @@ docker compose up -d --build
 
    Usuário: `postgres` | Senha: `postgres`
 
-- Prometheus → [http://localhost:7777/metrics](http://localhost:7777/metrics)
+- Prometheus → [https://localhost:7777/metrics](https://localhost:7777/metrics)
 
 ##
 
