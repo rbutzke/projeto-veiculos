@@ -21,6 +21,7 @@ Este projeto apresenta uma API REST **NestJS**, utilizando:
 - **Swagger** - Documentação da API
 - **PostgreSQL** - Banco de Dados SQL Relacional
 - **PGAdmin** - Manipulação/Visualização dos Dados
+- **Prometheus** - Para métricas
 
 ---
 
@@ -42,7 +43,7 @@ docker compose up -d --build
 ### 3. Serviços disponíveis
 
 - API NestJS → [https://localhost:7777](http://localhost:7777)
-- Swagger → [https://localhost:7777/api](http://localhost:7777)
+- Swagger → [https://localhost:7777/api](http://localhost:7777/api)
 - PGAdmin → [http://localhost:5050](http://localhost:5050)
 
   Usuário: `admin@admin.com` | Senha: `admin123`
@@ -50,6 +51,8 @@ docker compose up -d --build
 - Banco de Dados Postgres → Porta 5432
 
    Usuário: `postgres` | Senha: `postgres`
+
+- Prometheus → [http://localhost:7777/metrics](http://localhost:7777/metrics)
 
 ##
 
