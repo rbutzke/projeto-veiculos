@@ -137,7 +137,7 @@ O RabbitMQ Broker por sua vez recebe a mensage e espera que o consumo seja feito
 
 O Worker/Consumer basicamente fica monitorando a fila do RabbitMQ e ao detectar pega/remove a mensagem fazendo posteriormente tratativas e inserindo a mensagem na tabela do banco de dados payments emitindo uma mensagem de sucesso.
 
-**Ponto importante de atenção:**  visando simular um ambiente real o NestJS Backend Veiculos e o Postgres se encontra em uma rede separada do RabbitMQ , NestJS-Producer e NestJS-Worker(lembrando que após consumir a mensagem o Worker grava a mesma no banco em outra rede).
+**Ponto importante de atenção:**  visando simular um ambiente real o NestJS Backend Veiculos e o Postgres se encontram em uma rede separada do RabbitMQ , NestJS-Producer e NestJS-Worker(lembrando que após consumir a mensagem o Worker grava a mesma no banco em outra rede).
 
 caso ocorra alguma incosistencia na comunicação das redes após o docker compose, será necessário conectar as redes virtuais do docker:
 
