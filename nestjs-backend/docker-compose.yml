@@ -25,7 +25,19 @@ services:
     networks:
       - nest-network
     command: npm run start:dev
+  
 
+    # Serviço para rodar testes
+  test:
+    build: .
+    environment:
+      - NODE_ENV=test
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm test
   # Banco de dados PostgreSQL
   postgres:
     image: postgres:13-alpine

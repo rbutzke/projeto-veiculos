@@ -68,6 +68,22 @@ Para efetuar o consumo dos endpoints da API sem utilizar o frontend segue a cole
 Para executar os testes das principais funcionalidades seguem os comandos abaixo:
 
 ```bash
+#Rodar todos os Testes
+docker compose run --rm test npm test
+
+docker compose run --rm test npm test -- src/vehicle/test/vehicle.service.spec.ts
+
+# Funcionalidades especificas:
+docker compose run --rm test npm test -- src/vehicle/test/vehicle.controller.spec.ts
+
+docker compose run --rm test npm test -- src/common/database/test/pg.provider.spec.ts
+
+docker compose run --rm test npm test -- src/auth/test/auth.service.spec.ts
+
+docker compose run --rm test npm test -- src/auth/test/auth.controller.spec.ts
+
+
+#Testes locais fora do docker
 npm test -- src/vehicle/test/vehicle.service.spec.ts 
 
 npm test -- src/vehicle/test/vehicle.controller.spec.ts
@@ -156,13 +172,16 @@ Este docker compose deverá subir rabbitmq , nestjs-producer e nestjs-worker.
 
 - nestjs-producer → [https://localhost:7778/payment](http://localhost:7778/payment)  
   este endpoint não utiliza autenticação
+
   confirmação de envior ocorre pelo postman e pelo console
 
 - nestjs-worker -> se sucesso grava na tabela do banco de dados payments   
+
   confirmação de recebimento e gravação no banco de dados ocorre pelo console
 
 - rabbitmq -> [https://localhost:15672](https://localhost:15672)  
   Usuário: `guest` | Senha: `guest`
+
   `Queue -> payment_queue`   
 #
 
