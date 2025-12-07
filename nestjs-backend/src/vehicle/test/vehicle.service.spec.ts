@@ -69,7 +69,7 @@ describe('VehicleService', () => {
       // Primeiro: verificação - veículo não existe
       pool.query
         .mockResolvedValueOnce({
-          rows: [], // ← CORREÇÃO: array vazio
+          rows: [],
           rowCount: 0,
         })
         // Segundo: inserção
@@ -78,10 +78,9 @@ describe('VehicleService', () => {
           rowCount: 1,
         });
 
-      // Act
+
       const result = await service.createVehicle(createVehicleDto);
 
-      // Assert
       expect(pool.query).toHaveBeenNthCalledWith(
         1,
         'SELECT id FROM vehicle WHERE placa = $1',
@@ -92,7 +91,7 @@ describe('VehicleService', () => {
     });
 
     it('deve apresentar um erro quando a consulta ao banco de dados falhar', async () => {
-  // Arrange
+
   const createVehicleDto: CreateVehicleDto = {
     placa: 'ABC1234',
     chassi: 'XYZ987654321',
@@ -109,12 +108,12 @@ describe('VehicleService', () => {
   // Quando a primeira query (SELECT) for chamada, lança erro
   pool.query.mockRejectedValue(mockError);
 
-  // Act & Assert
+
   await expect(service.createVehicle(createVehicleDto)).rejects.toThrow(
     InternalServerErrorException
   );
   await expect(service.createVehicle(createVehicleDto)).rejects.toThrow(
-    'Erro no Database' // ← Deve estar DENTRO da mensagem do InternalServerErrorException
+    'Erro no Database'
   );
   
   // Verifica a mensagem completa

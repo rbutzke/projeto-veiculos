@@ -5,7 +5,7 @@ import { EventPattern, Payload } from '@nestjs/microservices';
 export class PaymentConsumer {
   private readonly logger = new Logger(PaymentConsumer.name);
 
-  @EventPattern('payment_created') // Deve ser o MESMO pattern do producer
+  @EventPattern('payment_created') 
   async handlePaymentCreated(@Payload() data: any) {
     this.logger.log(`💰 Processando pagamento: ${data.id}`);
     this.logger.debug('Dados recebidos:', data);
@@ -24,8 +24,6 @@ export class PaymentConsumer {
       
       this.logger.log(`✅ Pagamento ${data.id} processado com sucesso!`);
       this.logger.log(`📊 Valor: ${data.amount} | Cliente: ${data.id}`);
-      
-      // Aqui você pode salvar no banco, enviar email, etc.
       
       return processed;
       

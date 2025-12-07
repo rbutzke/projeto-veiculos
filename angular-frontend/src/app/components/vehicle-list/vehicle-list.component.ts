@@ -71,9 +71,7 @@ export class VehicleListComponent implements OnInit {
       this.authService.login().subscribe({
       next: (loginResponse) => {
         console.log('✅ Login realizado com sucesso!');
-        //console.log('Token recebido:', loginResponse.access_token.substring(0, 30) + '...');
-        
-        // PASSO 2: Depois do login, carrega os veículos
+
         this.loadVehicles();
       },
     });

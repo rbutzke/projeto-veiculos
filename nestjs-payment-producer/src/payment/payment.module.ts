@@ -2,10 +2,10 @@
 import { Module } from '@nestjs/common';
 import { PaymentController } from './payment.controller';
 import { PaymentService } from './payment.service';
-import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';  // Importar o módulo
+import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
 
 @Module({
-  imports: [RabbitMQModule],  // Importar o módulo que contém RabbitMQService
+  imports: [RabbitMQModule],
   controllers: [PaymentController],
   providers: [PaymentService],
   exports: [PaymentService],

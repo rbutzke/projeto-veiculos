@@ -7,15 +7,14 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
 
 @NgModule({
   declarations: [
-    // AppComponent is standalone, so it should not be declared here
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    VehicleListComponent, // VehicleListComponent is standalone
-    AppComponent // Import standalone component
+    VehicleListComponent, 
+    AppComponent 
   ],
   providers: [],
-  // AppComponent is standalone, so it should not be bootstrapped via NgModule
+  
 })
 export class AppModule { }

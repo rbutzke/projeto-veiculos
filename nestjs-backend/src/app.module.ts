@@ -25,7 +25,7 @@ import { PgModule } from './common/database/pg.module';
                 useFactory: (config: ConfigService) => [
                  {
                  ttl: config.get<number>('THROTTLE_TTL', 60000), // 1 minuto
-                 limit: config.get<number>('THROTTLE_LIMIT', 50), // 10 requisições por minuto
+                 limit: config.get<number>('THROTTLE_LIMIT', 50), // 50 requisições por minuto
                  },
              ],
            }),

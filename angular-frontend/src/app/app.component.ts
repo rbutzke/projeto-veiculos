@@ -5,8 +5,8 @@ import { VehicleListComponent } from './components/vehicle-list/vehicle-list.com
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  standalone: true,  // Se for standalone
-  imports: [VehicleListComponent]  // Adicione esta linha se for standalone
+  standalone: true,  
+  imports: [VehicleListComponent]  
 })
 export class AppComponent {
   title = 'angular-frontend';
