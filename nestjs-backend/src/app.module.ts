@@ -9,6 +9,7 @@ import { CustomLogger } from './common/pino/custom.logger';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { PgModule } from './common/database/pg.module';
+import { MetricsModule } from './common/prometheus/metrics.module'; 
 
 @Global()
 @Module({
@@ -30,6 +31,7 @@ import { PgModule } from './common/database/pg.module';
              ],
            }),
              LoggerModule.forRoot({ pinoHttp: { level: 'trace' } }),
+             MetricsModule,
              // Módulos de funcionalidade
              VehicleModule, 
              AuthModule],
